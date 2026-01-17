@@ -1,7 +1,7 @@
 import { vi } from "vitest";
 
 // Global test setup
-global.console = {
+globalThis.console = {
   ...console,
   // Silence console.log in tests unless needed
   log: vi.fn(),
