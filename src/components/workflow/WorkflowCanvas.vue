@@ -87,7 +87,7 @@ const onDrop = (event: DragEvent) => {
     <VueFlow
       :nodes="nodes"
       :edges="edges"
-      :node-types="nodeTypes"
+      :node-types="nodeTypes as any"
       @node-click="onNodeClick"
       @pane-click="onPaneClick"
       @dragover="onDragOver"

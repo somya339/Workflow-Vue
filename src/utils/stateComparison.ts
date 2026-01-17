@@ -7,9 +7,19 @@ export function areStatesEqual(
   if (state1.nodes.length !== state2.nodes.length) return false;
   if (state1.edges.length !== state2.edges.length) return false;
 
+  const initialValue = {
+    position: {
+      x: 0,
+      y: 0,
+    },
+    id: "",
+    type: "",
+    data: {},
+  };
+
   for (let i = 0; i < state1.nodes.length; i++) {
-    const node1 = state1.nodes[i];
-    const node2 = state2.nodes[i];
+    const node1 = state1.nodes[i] ?? initialValue;
+    const node2 = state2.nodes[i] ?? initialValue;
 
     if (node1?.id !== node2?.id) return false;
     if (node1?.type !== node2?.type) return false;
