@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { setActivePinia, createPinia } from "pinia";
 import { useWorkflowStore } from "../workflow";
-import type { WorkflowNode, WorkflowEdge } from "../../types/workflow";
 
 describe("Workflow Store", () => {
   beforeEach(() => {
@@ -85,9 +84,9 @@ describe("Workflow Store", () => {
 
       expect(nodeId).toMatch(/^start-\d+-[a-z0-9]+$/);
       expect(store.nodes).toHaveLength(1);
-      expect(store.nodes[0].id).toBe(nodeId);
-      expect(store.nodes[0].type).toBe("start");
-      expect(store.nodes[0].position).toEqual({ x: 50, y: 50 });
+      expect(store?.nodes[0]?.id).toBe(nodeId);
+      expect(store?.nodes[0]?.type).toBe("start");
+      expect(store?.nodes[0]?.position).toEqual({ x: 50, y: 50 });
     });
 
     it("should update node data", () => {
@@ -98,7 +97,7 @@ describe("Workflow Store", () => {
 
       const updatedNode = store.getNodeById(nodeId);
       expect(updatedNode?.data.label).toBe("Updated");
-      expect(updatedNode?.data.operation).toBe("lowercase");
+      expect((updatedNode?.data as any).operation).toBe("lowercase");
     });
 
     it("should update node position", () => {
@@ -134,9 +133,9 @@ describe("Workflow Store", () => {
       store.addEdge(startId, transformId);
 
       expect(store.edges).toHaveLength(1);
-      expect(store.edges[0].source).toBe(startId);
-      expect(store.edges[0].target).toBe(transformId);
-      expect(store.edges[0].id).toBe(`e${startId}-${transformId}`);
+      expect(store?.edges[0]?.source).toBe(startId);
+      expect(store?.edges[0]?.target).toBe(transformId);
+      expect(store?.edges[0]?.id).toBe(`e${startId}-${transformId}`);
     });
 
     it("should prevent duplicate edges", () => {
@@ -188,7 +187,7 @@ describe("Workflow Store", () => {
       const endId = store.addNode("end", { x: 100, y: 0 }, { label: "End" });
 
       store.addEdge(startId, endId);
-      const edgeId = store.edges[0].id;
+      const edgeId = store?.edges[0]?.id ?? '';
 
       store.removeEdge(edgeId);
 
@@ -247,7 +246,7 @@ describe("Workflow Store", () => {
       store.importWorkflow(importData);
 
       expect(store.nodes).toHaveLength(1);
-      expect(store.nodes[0].id).toBe("test-node");
+      expect(store?.nodes[0]?.id).toBe("test-node");
       expect(store.selectedNodeId).toBeNull();
       expect(store.isExecuting).toBe(false);
     });
@@ -256,8 +255,8 @@ describe("Workflow Store", () => {
       const store = useWorkflowStore();
       store.addNode("start", { x: 0, y: 0 }, { label: "Start" });
       store.addNode("end", { x: 100, y: 0 }, { label: "End" });
-      store.addEdge(store?.nodes?.[0]?.id, store?.nodes?.[1]?.id);
-      store.setSelectedNode(store?.nodes?.[0]?.id);
+      store.addEdge(store?.nodes?.[0]?.id ?? '', store?.nodes?.[1]?.id ?? '');
+      store.setSelectedNode(store?.nodes?.[0]?.id ?? '');
       store.setExecuting(true);
 
       store.clearWorkflow();
